@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useGame } from '../context/GameContext';
-import { WordListModal } from './WordListModal';
 import type { WordLength, GameMode } from '../types';
 
 interface HomeScreenProps {
@@ -11,23 +10,11 @@ export function HomeScreen({ onStartGame }: HomeScreenProps) {
   const { startGame, stats } = useGame();
   const [selectedLength, setSelectedLength] = useState<WordLength>(5);
   const [selectedMode, setSelectedMode] = useState<GameMode>('unlimited');
-  const [showWordList, setShowWordList] = useState(false);
-  const [customWord, setCustomWord] = useState<string | null>(null);
 
   const handlePlay = () => {
-    console.log('Play clicked - customWord:', customWord, 'selectedLength:', selectedLength, 'selectedMode:', selectedMode);
-    startGame(selectedLength, selectedMode, customWord || undefined);
+    console.log('Play clicked - selectedLength:', selectedLength, 'selectedMode:', selectedMode);
+    startGame(selectedLength, selectedMode, undefined);
     onStartGame();
-  };
-
-  const handleSelectWord = (word: string) => {
-    console.log('Word selected:', word, 'length:', word.length);
-    setCustomWord(word);
-    setSelectedLength(word.length as WordLength);
-  };
-
-  const handleClearCustomWord = () => {
-    setCustomWord(null);
   };
 
   return (
@@ -74,30 +61,6 @@ export function HomeScreen({ onStartGame }: HomeScreenProps) {
           </div>
         </div>
 
-        {/* Custom Word Selection */}
-        <div className="option-group">
-          <span className="option-label">Choose Word (Optional)</span>
-          {customWord ? (
-            <div className="selected-word-display">
-              <span className="selected-word">{customWord.toUpperCase()}</span>
-              <button 
-                className="clear-word-btn" 
-                onClick={handleClearCustomWord}
-                aria-label="Clear selected word"
-              >
-                ✕
-              </button>
-            </div>
-          ) : (
-            <button 
-              className="view-words-btn"
-              onClick={() => setShowWordList(true)}
-            >
-              📚 View Word List
-            </button>
-          )}
-        </div>
-
         <button className="play-btn" onClick={handlePlay}>
           Play
         </button>
@@ -108,12 +71,6 @@ export function HomeScreen({ onStartGame }: HomeScreenProps) {
           </button>
         </div>
       </div>
-
-      <WordListModal 
-        isOpen={showWordList}
-        onClose={() => setShowWordList(false)}
-        onSelectWord={handleSelectWord}
-      />
     </div>
   );
 }
