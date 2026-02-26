@@ -1,13 +1,22 @@
 import type { LetterFeedback, HintSummary, WordLength, GameStats, DailyChallenge } from '../types';
-import { FIVE_LETTER_WORDS, SIX_LETTER_WORDS } from '../data/words';
+
+// Empty word lists - game will use fallback words
+const FIVE_LETTER_WORDS: string[] = [];
+const SIX_LETTER_WORDS: string[] = [];
+
+// Fallback words if lists are empty
+const FALLBACK_5 = ['hello', 'world', 'apple', 'bread', 'chair'];
+const FALLBACK_6 = ['garden', 'banana', 'planet', 'orange', 'silver'];
 
 /**
  * Get a random word based on word length
  */
 export function getRandomWord(wordLength: WordLength): string {
   const wordList = wordLength === 5 ? FIVE_LETTER_WORDS : SIX_LETTER_WORDS;
-  const randomIndex = Math.floor(Math.random() * wordList.length);
-  return wordList[randomIndex];
+  const fallback = wordLength === 5 ? FALLBACK_5 : FALLBACK_6;
+  const list = wordList.length > 0 ? wordList : fallback;
+  const randomIndex = Math.floor(Math.random() * list.length);
+  return list[randomIndex];
 }
 
 /**
@@ -16,6 +25,8 @@ export function getRandomWord(wordLength: WordLength): string {
  */
 export function getDailyWord(wordLength: WordLength): string {
   const wordList = wordLength === 5 ? FIVE_LETTER_WORDS : SIX_LETTER_WORDS;
+  const fallback = wordLength === 5 ? FALLBACK_5 : FALLBACK_6;
+  const list = wordList.length > 0 ? wordList : fallback;
   const today = new Date();
   const dateString = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
   
@@ -26,8 +37,8 @@ export function getDailyWord(wordLength: WordLength): string {
     hash = hash & hash;
   }
   
-  const index = Math.abs(hash) % wordList.length;
-  return wordList[index];
+  const index = Math.abs(hash) % list.length;
+  return list[index];
 }
 
 /**
@@ -283,7 +294,9 @@ export function getDailyChallenge(): DailyChallenge {
   // Alternate between 5 and 6 letter words based on day
   const wordLength: WordLength = Math.abs(hash) % 2 === 0 ? 5 : 6;
   const wordList = wordLength === 5 ? FIVE_LETTER_WORDS : SIX_LETTER_WORDS;
-  const wordIndex = Math.abs(hash) % wordList.length;
+  const fallback = wordLength === 5 ? FALLBACK_5 : FALLBACK_6;
+  const list = wordList.length > 0 ? wordList : fallback;
+  const wordIndex = Math.abs(hash) % list.length;
   
   return {
     date: dateString,

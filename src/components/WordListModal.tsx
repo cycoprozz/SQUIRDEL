@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { FIVE_LETTER_WORDS, SIX_LETTER_WORDS } from '../data/words';
+
+// Fallback words - these are used when word list is empty
+const FIVE_LETTER_WORDS = ['hello', 'world', 'apple', 'bread', 'chair', 'dance', 'earth', 'flame', 'grape', 'house'];
+const SIX_LETTER_WORDS = ['garden', 'banana', 'planet', 'orange', 'silver', 'bridge', 'camera', 'dragon', 'forest', 'guitar'];
 
 interface WordListModalProps {
   isOpen: boolean;
