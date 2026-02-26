@@ -164,6 +164,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, [gameState, updateKeyboardStatus]);
 
   const addLetter = useCallback((letter: string) => {
+    // Don't allow letters that are marked as absent (not in word)
+    const upperLetter = letter.toUpperCase();
+    if (keyboardStatus[upperLetter] === 'absent') {
+      return;
+    }
+    
     setGameState(prev => {
       if (prev.currentGuess.length >= prev.wordLength || prev.gameStatus !== 'playing') {
         return prev;
@@ -173,7 +179,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         currentGuess: prev.currentGuess + letter.toLowerCase()
       };
     });
-  }, []);
+  }, [keyboardStatus]);
 
   const removeLetter = useCallback(() => {
     setGameState(prev => {

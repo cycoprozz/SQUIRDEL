@@ -73,6 +73,12 @@ export function GameScreen({ onBackToHome }: GameScreenProps) {
   // Handle virtual keyboard press
   const handleKeyPress = (key: string) => {
     if (gameStatus !== 'playing') return;
+    
+    // Don't allow letters that are not in the word
+    const lookupKey = key === 'BACK' ? 'BACKSPACE' : key;
+    if (keyboardStatus[lookupKey] === 'absent') {
+      return;
+    }
 
     if (key === 'ENTER') {
       handleSubmit();

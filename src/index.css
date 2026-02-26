@@ -457,8 +457,14 @@ h3 {
 }
 
 .key.absent {
-  background: var(--absent);
-  color: white;
+  background: #000000;
+  color: var(--text-muted);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.key.absent:hover {
+  background: #000000;
 }
 
 /* Message */
